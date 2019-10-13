@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
@@ -31,6 +32,26 @@ public class gifController {
         // 3. Zwracanie widoku
         return "home";
     }
+    @GetMapping("/favorites")
+    public String listFavoritesGifs(ModelMap modelMap) {
+        // 1. wyciąganie gifów
+        //  List<Gif> gifList = getAllGifs();
+        List<Gif> gifList = gifRepository.getFavoritesGifs();
+        // 2. Przekazanie gifów do View
+        modelMap.put("gifs", gifList);
+        // 3. Zwracanie widoku
+        return "favorites";
+
+    }
+    @GetMapping("/gif/{name}")
+    public String gifDetails(@PathVariable String name, ModelMap modelMap){
+        // 1. wyciąganie gifów
+        //  List<Gif> gifList = getAllGifs();
+        Gif gif = gifRepository.getGifByName(name);
+        // 2. Przekazanie gifów do View
+        modelMap.put("gif", gif);
+        // 3. Zwracanie widoku
+        return "gif-details";
 
 
  /*   @ResponseBody
@@ -54,21 +75,22 @@ public class gifController {
         return null;
     }
 
-    @ResponseBody
-    @GetMapping("/test2")
-    public String listGifs3() {
 
-        List<Gif> allGifs = getAllGifs();
+    @GetMapping("/")
+    public String listFavorites(ModelMap modelMap) {
+
+        List<Gif> allGifs = gifRepository.getGifs();
         List<Gif> notFavorite = new ArrayList<>();
+
 
         for (Gif x : allGifs) {
             if (!x.getFavorite()) { // false -> nie wchodzę to środka, true -> wchodzę
                 notFavorite.add(x);
             }
             }
-        return notFavorite.toString();
+        return "favorites";*/
 
-        }*/
+        }
 
 }
 
